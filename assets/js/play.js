@@ -4,10 +4,15 @@ const playState = {
     this.currentProblem = ''
     this.currentSolution = 0
     this.problems = 0
+    this.waterLevel = 0
 
-    // INITIAL GAMEPLAY
+    // BACKGROUND IMAGE
     const background = Game.add.sprite(0, 0, 'background')
     background.scale.setTo(0.5, 0.5)
+
+    // WATER SPRITE
+    this.water = Game.add.sprite(0, Game.world.centerY * 2, 'water')
+    this.water.scale.setTo(2, 0)
 
     // GENERATE WATER DROPS WITH TEXT
     Game.time.events.repeat(
@@ -29,6 +34,8 @@ const playState = {
 
       if (this.waterDrop.y >= 400) {
         this.destroyProblem()
+        this.waterLevel -= 0.009
+        this.water.scale.setTo(2, this.waterLevel)
       }
     }
   },
@@ -42,7 +49,7 @@ const playState = {
     // WATER DROP
     this.waterDrop = Game.add.sprite(Game.world.centerX, -120, 'drop')
     this.waterDrop.scale.setTo(0.2, 0.2)
-    this.problems += 1
+    this.problems++
 
     // TEXT STYLES
     const mathTextStyle = {
@@ -56,7 +63,6 @@ const playState = {
     // WATER TEXT
     this.currentProblem = this.mathProblem()
     this.currentSolution = this.problemResult(this.currentProblem)
-    console.log(this.currentSolution)
     this.mathText = Game.add.text(0, 0, this.currentProblem, mathTextStyle)
     this.mathText.anchor.setTo(0.5)
 
