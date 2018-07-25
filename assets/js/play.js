@@ -1,6 +1,10 @@
 const playState = {
   create: function() {
+    // INITIAL VARIABLES
+    this.currentProblem = ''
+    this.currentSolution = 0
     this.problems = 0
+
     // INITIAL GAMEPLAY
     const background = Game.add.sprite(0, 0, 'background')
     background.scale.setTo(0.5, 0.5)
@@ -50,7 +54,10 @@ const playState = {
     }
 
     // WATER TEXT
-    this.mathText = Game.add.text(0, 0, this.mathProblem(), mathTextStyle)
+    this.currentProblem = this.mathProblem()
+    this.currentSolution = this.problemResult(this.currentProblem)
+    console.log(this.currentSolution)
+    this.mathText = Game.add.text(0, 0, this.currentProblem, mathTextStyle)
     this.mathText.anchor.setTo(0.5)
 
     // Add Physics
@@ -60,7 +67,7 @@ const playState = {
 
   mathProblem: function(operation, max = 15) {
     // OPERATION SYMBOL
-    const operations = ['+', '-', '*', '/']
+    const operations = ['+', '-', '*']
     const rand = Math.floor(Math.random() * operations.length)
     const symbol = operation || operations[rand]
 
@@ -70,6 +77,26 @@ const playState = {
     const problem = `${left} ${symbol} ${right}`
 
     return problem
+  },
+
+  problemResult: function(problem) {
+    const values = problem.split(' ')
+    // CONVERTS LEFT AND RIGHT TO INTEGERS
+    const left = parseInt(values[0])
+    const right = parseInt(values[2])
+
+    // RETURN RESULT BASED ON OPERATION
+    switch (values[1]) {
+      case '+':
+        return left + right
+        break
+      case '-':
+        return left - right
+        break
+      case '*':
+        return left * right
+        break
+    }
   },
 
   gameOver: function() {
