@@ -16,7 +16,7 @@ const playState = {
 
     // GENERATE WATER DROPS WITH TEXT
     Game.time.events.repeat(
-      Phaser.Timer.SECOND * 3.3,
+      Phaser.Timer.SECOND * 3.5,
       10000,
       this.generateDrop.bind(this)
     )
@@ -33,16 +33,21 @@ const playState = {
       )
 
       if (this.waterDrop.y >= 400) {
-        this.destroyProblem()
-        this.waterLevel -= 0.009
-        this.water.scale.setTo(2, this.waterLevel)
+        this.failedAttempt()
       }
+
+      this.waterDrop.events.onDestroy.add(this.waterLevelIncreases, this)
     }
   },
 
-  destroyProblem: function() {
+  failedAttempt: function() {
     this.waterDrop.destroy()
     this.mathText.destroy()
+  },
+
+  waterLevelIncreases: function() {
+    this.waterLevel -= 0.2
+    this.water.scale.setTo(2, this.waterLevel)
   },
 
   generateDrop: function() {
