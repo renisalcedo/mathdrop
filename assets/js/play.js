@@ -1,15 +1,46 @@
 const playState = {
   create: function() {
-    /* ---------------- */
-    /* ---- SPRITES --- */
-    /* ---------------- */
+    // INITIAL GAMEPLAY
+    this.pastMidPoint = false
+
     const background = Game.add.sprite(0, 0, 'background')
     background.scale.setTo(0.5, 0.5)
 
-    // WATER DROP AND TEXT
+    // GENERATE WATER DROPS WITH TEXT
+    this.game.time.events.repeat(
+      Phaser.Timer.SECOND * 2,
+      10000,
+      this.generateDrop.bind(this)
+    )
+  },
+
+  update: function() {
+    // INITIATES WATER DROP MOVEMENT WHEN DEFINED
+    if (this.mathText && this.waterDrop) {
+      this.mathText.x = Math.floor(this.waterDrop.x + this.waterDrop.width / 2)
+      this.mathText.y = Math.floor(
+        this.waterDrop.y + this.waterDrop.height / 2 + 55
+      )
+
+      // PAST THE MIDDLE OF THE MAP
+      if (this.waterDrop.y >= 120) {
+        this.pastMidPoint = true
+      }
+
+      if (this.pastMidPoint && this.waterDrop.y >= 325) {
+        this.mathText.destroy()
+        this.waterDrop.destroy()
+        this.pastMidPoint = false
+      }
+    }
+  },
+
+  generateDrop: function() {
+    // WATER DROP
     this.waterDrop = Game.add.sprite(Game.world.centerX, -120, 'drop')
     this.waterDrop.scale.setTo(0.2, 0.2)
 
+    // TEXT STYLES
     const mathTextStyle = {
       font: '32px Arial',
       fill: '#fff',
@@ -18,6 +49,7 @@ const playState = {
       align: 'center'
     }
 
+    // WATER TEXT
     this.mathText = Game.add.text(0, 0, '1 + 5', mathTextStyle)
     this.mathText.anchor.setTo(0.5)
 
@@ -25,18 +57,6 @@ const playState = {
     Game.physics.arcade.enable(this.waterDrop)
     Game.physics.arcade.gravity.y = 250
     this.waterDrop.collideWorldBounds = true
-  },
-
-  update: function() {
-    this.mathText.x = Math.floor(this.waterDrop.x + this.waterDrop.width / 2)
-    this.mathText.y = Math.floor(
-      this.waterDrop.y + this.waterDrop.height / 2 + 55
-    )
-
-    if (this.waterDrop.y >= 435) {
-      console.log('COLLIDE!')
-      this.waterDrop.destroy()
-    }
   },
 
   mathProblem: function(operation, max = 15) {
