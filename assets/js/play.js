@@ -1,14 +1,13 @@
 const playState = {
   create: function() {
+    this.problems = 0
     // INITIAL GAMEPLAY
-    this.pastMidPoint = false
-
     const background = Game.add.sprite(0, 0, 'background')
     background.scale.setTo(0.5, 0.5)
 
     // GENERATE WATER DROPS WITH TEXT
-    this.game.time.events.repeat(
-      Phaser.Timer.SECOND * 2,
+    Game.time.events.repeat(
+      Phaser.Timer.SECOND * 3.3,
       10000,
       this.generateDrop.bind(this)
     )
@@ -17,28 +16,29 @@ const playState = {
   update: function() {
     // INITIATES WATER DROP MOVEMENT WHEN DEFINED
     if (this.mathText && this.waterDrop) {
+      this.waterDrop.y += 3
+
       this.mathText.x = Math.floor(this.waterDrop.x + this.waterDrop.width / 2)
       this.mathText.y = Math.floor(
         this.waterDrop.y + this.waterDrop.height / 2 + 55
       )
 
-      // PAST THE MIDDLE OF THE MAP
-      if (this.waterDrop.y >= 120) {
-        this.pastMidPoint = true
-      }
-
-      if (this.pastMidPoint && this.waterDrop.y >= 325) {
-        this.mathText.destroy()
-        this.waterDrop.destroy()
-        this.pastMidPoint = false
+      if (this.waterDrop.y >= 400) {
+        this.destroyProblem()
       }
     }
+  },
+
+  destroyProblem: function() {
+    this.waterDrop.destroy()
+    this.mathText.destroy()
   },
 
   generateDrop: function() {
     // WATER DROP
     this.waterDrop = Game.add.sprite(Game.world.centerX, -120, 'drop')
     this.waterDrop.scale.setTo(0.2, 0.2)
+    this.problems += 1
 
     // TEXT STYLES
     const mathTextStyle = {
@@ -55,7 +55,6 @@ const playState = {
 
     // Add Physics
     Game.physics.arcade.enable(this.waterDrop)
-    Game.physics.arcade.gravity.y = 250
     this.waterDrop.collideWorldBounds = true
   },
 
