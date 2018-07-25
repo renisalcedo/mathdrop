@@ -50,7 +50,7 @@ const playState = {
     }
 
     // WATER TEXT
-    this.mathText = Game.add.text(0, 0, '1 + 5', mathTextStyle)
+    this.mathText = Game.add.text(0, 0, this.mathProblem(), mathTextStyle)
     this.mathText.anchor.setTo(0.5)
 
     // Add Physics
@@ -70,7 +70,7 @@ const playState = {
     const right = Math.floor(Math.random() * max + 1)
     const problem = `${left} ${symbol} ${right}`
 
-    return mathProblem
+    return problem
   },
 
   gameOver: function() {
