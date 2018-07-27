@@ -20,6 +20,9 @@ const playState = {
       10000,
       this.generateDrop.bind(this)
     )
+
+    // INITIALIZES THE TEXT CHOICES
+    this.initChoices()
   },
 
   update: function() {
@@ -71,9 +74,45 @@ const playState = {
     this.mathText = Game.add.text(0, 0, this.currentProblem, mathTextStyle)
     this.mathText.anchor.setTo(0.5)
 
+    // CALLS MULTIPLE CHOICES TEXT
+    // this.multipleChoices()
+
     // Add Physics
     Game.physics.arcade.enable(this.waterDrop)
-    this.waterDrop.collideWorldBounds = true
+  },
+
+  initChoices: function() {
+    // TEXT STYLES
+    const optionTextStyle = {
+      font: '32px Arial',
+      fill: '#ff0000',
+      align: 'center'
+    }
+
+    this.optionOne = Game.add.text(
+      Game.world.centerX - 100,
+      150,
+      '5',
+      optionTextStyle
+    )
+    this.optionTwo = Game.add.text(
+      Game.world.centerX - 100,
+      195,
+      '20',
+      optionTextStyle
+    )
+    this.optionThree = Game.add.text(
+      Game.world.centerX - 100,
+      235,
+      '30',
+      optionTextStyle
+    )
+    this.optionFour = Game.add.text(
+      Game.world.centerX - 100,
+      275,
+      '3',
+      optionTextStyle
+    )
   },
 
   mathProblem: function(operation, max = 15) {
