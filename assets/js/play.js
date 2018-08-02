@@ -5,6 +5,8 @@ const playState = {
     this.currentSolution = 0
     this.problems = 0
     this.waterLevel = 0
+    this.choicesLength = 4
+    this.option = []
 
     // BACKGROUND IMAGE
     const background = Game.add.sprite(0, 0, 'background')
@@ -20,9 +22,6 @@ const playState = {
       10000,
       this.generateDrop.bind(this)
     )
-
-    // INITIALIZES THE TEXT CHOICES
-    this.initChoices()
   },
 
   update: function() {
@@ -61,7 +60,7 @@ const playState = {
 
     // TEXT STYLES
     const mathTextStyle = {
-      font: '32px Arial',
+      font: '25px Arial',
       fill: '#fff',
       wordWrap: true,
       wordWrapWith: this.waterDrop.width,
@@ -74,8 +73,8 @@ const playState = {
     this.mathText = Game.add.text(0, 0, this.currentProblem, mathTextStyle)
     this.mathText.anchor.setTo(0.5)
 
-    // CALLS MULTIPLE CHOICES TEXT
-    // this.multipleChoices()
+    // INITIALIZES THE TEXT CHOICES
+    this.initChoices()
 
     // Add Physics
     Game.physics.arcade.enable(this.waterDrop)
@@ -85,34 +84,40 @@ const playState = {
     // TEXT STYLES
     const optionTextStyle = {
       font: '32px Arial',
-      fill: '#ff0000',
-      align: 'center'
+      fill: '#ff0000'
     }
 
-    this.optionOne = Game.add.text(
-      Game.world.centerX - 100,
-      150,
-      '5',
-      optionTextStyle
-    )
-    this.optionTwo = Game.add.text(
-      Game.world.centerX - 100,
-      195,
-      '20',
-      optionTextStyle
-    )
-    this.optionThree = Game.add.text(
-      Game.world.centerX - 100,
-      235,
-      '30',
-      optionTextStyle
-    )
-    this.optionFour = Game.add.text(
-      Game.world.centerX - 100,
-      275,
-      '3',
-      optionTextStyle
-    )
+    let yDistance = 0
+    let choices = this.populateChoices()
+
+    for (let i = 0; i < this.choicesLength; i++) {
+      this.option[i] = Game.add.text(
+        Game.world.centerX - 100,
+        150 + yDistance,
+        choices[i],
+        optionTextStyle
+      )
+
+      yDistance += 40
+    }
+  },
+
+  populateChoices: function() {
+    let choices = []
+    choices.push(this.currentSolution)
+    for (let i = 0; i < 3; i++) {
+      choices.push(Math.floor(Math.random() * 99))
+    }
+
+    return this.shuffle(choices)
+  },
+
+  shuffle: function(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[a[i], a[j]] = [a[j], a[i]]
+    }
+    return a
   },
 
   mathProblem: function(operation, max = 15) {
