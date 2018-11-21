@@ -25,6 +25,7 @@ const playState = {
 
     // Initialize click events for the text
     this.addClickEvents()
+
     // GENERATE WATER DROPS WITH TEXT
     Game.time.events.repeat(
       Phaser.Timer.SECOND * 3.5,
@@ -45,6 +46,7 @@ const playState = {
 
       if (this.waterDrop.y >= 400) {
         this.failedAttempt()
+        this.waterLevelIncreases()
       }
     }
   },
@@ -56,21 +58,21 @@ const playState = {
 
   attempt: function(opt) {
     if (parseInt(opt.text) === this.currentSolution) {
-      console.log("Correct")
-    } else {
+      this.waterDrop.y = 0
       this.failedAttempt()
+    } else {
+      console.log("INCORRECT!")
     }
   },
 
   waterLevelIncreases: function() {
-    this.waterLevel -= 0.2
+    this.waterLevel -= 0.005
     this.water.scale.setTo(2, this.waterLevel)
   },
 
   generateDrop: function() {
     // WATER DROP
     this.waterDrop = Game.add.sprite(Game.world.centerX, -120, 'drop')
-    this.waterDrop.events.onDestroy.add(this.waterLevelIncreases, this)
     this.waterDrop.scale.setTo(0.2, 0.2)
     this.problems++
 
