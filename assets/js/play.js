@@ -19,6 +19,9 @@ const playState = {
     this.opt4 = Game.add.text( Game.world.centerX - 100, 150 + 160, "", optionTextStyle)
     this.option = [this.opt1, this.opt2, this.opt3, this.opt4]
 
+    // Initialize click events for the text
+    this.addClickEvents()
+
     // WATER SPRITE
     this.water = Game.add.sprite(0, Game.world.centerY * 2, 'water')
     this.water.scale.setTo(2, 0)
@@ -44,14 +47,20 @@ const playState = {
       if (this.waterDrop.y >= 400) {
         this.failedAttempt()
       }
-
-      this.waterDrop.events.onDestroy.add(this.waterLevelIncreases, this)
     }
   },
 
   failedAttempt: function() {
     this.waterDrop.destroy()
     this.mathText.destroy()
+  },
+
+  attempt: function(opt) {
+    if (parseInt(opt.text) === this.currentSolution) {
+      console.log("Correct")
+    } else {
+      this.failedAttempt()
+    }
   },
 
   waterLevelIncreases: function() {
@@ -62,6 +71,7 @@ const playState = {
   generateDrop: function() {
     // WATER DROP
     this.waterDrop = Game.add.sprite(Game.world.centerX, -120, 'drop')
+    this.waterDrop.events.onDestroy.add(this.waterLevelIncreases, this)
     this.waterDrop.scale.setTo(0.2, 0.2)
     this.problems++
 
@@ -144,6 +154,13 @@ const playState = {
       case '*':
         return left * right
         break
+    }
+  },
+
+  addClickEvents: function() {
+    for(let i = 0; i < this.option.length; i++) {
+      this.option[i].inputEnabled = true
+      this.option[i].events.onInputDown.add(this.attempt, this, this.option[i])
     }
   },
 
