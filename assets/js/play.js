@@ -11,6 +11,10 @@ const playState = {
     const background = Game.add.sprite(0, 0, 'background')
     background.scale.setTo(0.5, 0.5)
 
+    // WATER SPRITE
+    this.water = Game.add.sprite(0, Game.world.centerY * 2, 'water')
+    this.water.scale.setTo(2, 0)
+
     // Option Text with styles
     const optionTextStyle = { font: '32px Arial', fill: '#ff0000' }
     this.opt1 = Game.add.text( Game.world.centerX - 100, 150 + 40, "", optionTextStyle)
@@ -21,11 +25,6 @@ const playState = {
 
     // Initialize click events for the text
     this.addClickEvents()
-
-    // WATER SPRITE
-    this.water = Game.add.sprite(0, Game.world.centerY * 2, 'water')
-    this.water.scale.setTo(2, 0)
-
     // GENERATE WATER DROPS WITH TEXT
     Game.time.events.repeat(
       Phaser.Timer.SECOND * 3.5,
