@@ -6,11 +6,18 @@ const playState = {
     this.problems = 0
     this.waterLevel = 0
     this.choicesLength = 4
-    this.option = []
 
     // BACKGROUND IMAGE
     const background = Game.add.sprite(0, 0, 'background')
     background.scale.setTo(0.5, 0.5)
+
+    // Option Text with styles
+    const optionTextStyle = { font: '32px Arial', fill: '#ff0000' }
+    this.opt1 = Game.add.text( Game.world.centerX - 100, 150 + 40, "", optionTextStyle)
+    this.opt2 = Game.add.text( Game.world.centerX - 100, 150 + 80, "", optionTextStyle)
+    this.opt3 = Game.add.text( Game.world.centerX - 100, 150 + 120, "", optionTextStyle)
+    this.opt4 = Game.add.text( Game.world.centerX - 100, 150 + 160, "", optionTextStyle)
+    this.option = [this.opt1, this.opt2, this.opt3, this.opt4]
 
     // WATER SPRITE
     this.water = Game.add.sprite(0, Game.world.centerY * 2, 'water')
@@ -81,24 +88,10 @@ const playState = {
   },
 
   initChoices: function() {
-    // TEXT STYLES
-    const optionTextStyle = {
-      font: '32px Arial',
-      fill: '#ff0000'
-    }
-
-    let yDistance = 0
     let choices = this.populateChoices()
 
-    for (let i = 0; i < this.choicesLength; i++) {
-      this.option[i] = Game.add.text(
-        Game.world.centerX - 100,
-        150 + yDistance,
-        choices[i],
-        optionTextStyle
-      )
-
-      yDistance += 40
+    for (let i = 0; i < choices.length; i++) {
+      this.option[i].setText(choices[i])
     }
   },
 
